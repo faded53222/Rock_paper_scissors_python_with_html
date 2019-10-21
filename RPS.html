@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PRS_Game</title>
+  </head>
+  <body>
+    <h1>Rock, Paper, Scissors</h1>
+      <h2 id="outcome">Tbd</h2>
+      <h3 id=total>Total:0</h3>
+      <h3 id=player>Player:0</h3>
+      <h3 id=computer>Computer:0</h3>
+      <h3 id=winrate>Win_rate:0</h3>
+    <button id="1" type="button" name="button">Rock</button>
+    <button id="2" type="button" name="button">Paper</button>
+    <button id="3" type="button" name="button">Scissors</button>
+    <script type="text/javascript" src="/eel.js"></script>
+    <script type="text/javascript">
+		var total=0
+		var playerScore=0
+		var compScore=0
+        document.getElementById('1').onclick=function(){js_deal(1)}
+        document.getElementById('2').onclick=function(){js_deal(2)}
+        document.getElementById('3').onclick=function(){js_deal(3)}  
+		function load(name) {
+		    let xhr = new XMLHttpRequest(),
+		        okStatus = document.location.protocol === "file:" ? 0 : 200;
+		    xhr.open('GET', name, false);
+		    xhr.overrideMimeType("text/html;charset=utf-8")
+		    xhr.send(null);
+		    return xhr.status === okStatus ? xhr.responseText : null;
+		}
+		function sleep(delay) {
+			var start = (new Date()).getTime();
+			while((new Date()).getTime() - start < delay) {
+				continue;
+			}
+		}
+        //eel.expose(set_result)
+        //function set_result(x){
+		//	result=x
+		//}
+ 		function toPercent(num){
+			var percent=Number(num*100).toFixed(2)+"%";
+			return percent;
+			}
+		function get_result(){
+			let text = load("data.txt");
+			console.log(text)
+			return text[0]
+		}
+        function js_deal(i){
+			result=0
+			eel.deal(i)
+			//sleep(100)
+			result=parseInt(get_result())
+			console.log(i)
+			console.log(result)
+			total+=1
+			document.getElementById('total').innerHTML="total:"+total
+			eel.remove()
+			if (result==i){
+				document.getElementById('outcome').innerHTML="Tie"
+			}
+            if ((result+1)%3+1==i){
+				document.getElementById('outcome').innerHTML="Los"
+				compScore +=1
+				document.getElementById('computer').innerHTML="computer:"+compScore
+            }
+            if (result%3+1==i){
+				document.getElementById('outcome').innerHTML="Win"
+				playerScore+=1
+				document.getElementById('player').innerHTML="player:"+playerScore
+            }
+			document.getElementById('winrate').innerHTML="Win_rate:"+toPercent(playerScore/(playerScore+compScore))
+			}
+    </script>
+  </body>
+</html>
